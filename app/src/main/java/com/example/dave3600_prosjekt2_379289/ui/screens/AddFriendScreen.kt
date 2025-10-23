@@ -7,17 +7,18 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dave3600_prosjekt2_379289.data.FriendRepository
 import com.example.dave3600_prosjekt2_379289.ui.friend.AddFriendViewModel
+import com.example.dave3600_prosjekt2_379289.R
 
 @Composable
 fun AddFriendScreen(
@@ -27,6 +28,8 @@ fun AddFriendScreen(
     val viewModel: AddFriendViewModel = viewModel {
         AddFriendViewModel(repository)
     }
+
+    val context = LocalContext.current
 
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
@@ -48,9 +51,9 @@ fun AddFriendScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Tilbake")
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = context.getString(R.string.back))
             }
-            Text("Legg til venn", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Text(text = context.getString(R.string.add_friend), fontSize = 24.sp, fontWeight = FontWeight.Bold)
         }
 
         if (errorMessage.isNotEmpty()) {
@@ -70,7 +73,7 @@ fun AddFriendScreen(
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Navn") },
+            label = { Text(text = context.getString(R.string.name)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -79,20 +82,20 @@ fun AddFriendScreen(
         OutlinedTextField(
             value = phone,
             onValueChange = { phone = it },
-            label = { Text("Telefonnummer") },
+            label = { Text(text = context.getString(R.string.phone)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         )
 
-        // Fødselsdag (format: YYYY-MM-DD)
+        // Fødselsdag (format: DD.MM.YYYY)
         OutlinedTextField(
             value = birthDate,
             onValueChange = { birthDate = it },
-            label = { Text("Fødselsdag (DD-MM-YYYY)") },
+            label = { Text(text = context.getString(R.string.birthday_w_example)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            placeholder = { Text("16-09-1999") }
+            placeholder = { Text(text = context.getString(R.string.birthday_example)) }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -101,11 +104,11 @@ fun AddFriendScreen(
         Button(
             onClick = {
                 when {
-                    name.isBlank() -> errorMessage = "Navn kan ikke være tomt"
-                    phone.isBlank() -> errorMessage = "Telefon kan ikke være tomt"
-                    birthDate.isBlank() -> errorMessage = "Fødselsdag kan ikke være tom"
-                    !birthDate.matches(Regex("\\d{2}-\\d{2}-\\d{4}")) ->
-                        errorMessage = "Feil format på fødselsdag. Bruk DD-MM-YYYY"
+                    name.isBlank() -> errorMessage = context.getString(R.string.name_error)
+                    phone.isBlank() -> errorMessage = context.getString(R.string.phone_error)
+                    birthDate.isBlank() -> errorMessage = context.getString(R.string.birthday_error)
+                    !birthDate.matches(Regex("\\d{2}.\\d{2}.\\d{4}")) ->
+                        errorMessage = context.getString(R.string.birthday_format_error)
                     else -> {
                         errorMessage = ""
                         viewModel.saveFriend(name, phone, birthDate)
@@ -117,7 +120,7 @@ fun AddFriendScreen(
                 .height(48.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE))
         ) {
-            Text("Lagre", color = Color.White, fontSize = 16.sp)
+            Text(text = context.getString(R.string.save), color = Color.White, fontSize = 16.sp)
         }
 
         Button(
@@ -125,9 +128,9 @@ fun AddFriendScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
         ) {
-            Text("Avbryt", fontSize = 16.sp)
+            Text(text = context.getString(R.string.abort), fontSize = 16.sp)
         }
     }
 }

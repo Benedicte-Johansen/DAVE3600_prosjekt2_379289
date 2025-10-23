@@ -113,7 +113,7 @@ fun PreferencesScreen(
                     if (smsEnabled && !hasSmsPermission) {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            "⚠️ SMS-tillatelse er ikke gitt. Appen vil ikke kunne sende meldinger.",
+                            "SMS-tillatelse er ikke gitt. Appen vil ikke kunne sende meldinger.",
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.error
                         )

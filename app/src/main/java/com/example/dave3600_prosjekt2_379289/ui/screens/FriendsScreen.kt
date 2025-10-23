@@ -78,7 +78,7 @@ fun FriendsScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                "🎉 Bursdager i dag!",
+                                "Bursdager i dag!",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF2E7D32)
@@ -173,7 +173,10 @@ fun FriendCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+        ),
     ) {
         Row(
             modifier = Modifier
@@ -190,12 +193,12 @@ fun FriendCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "📞 ${friend.phone}",
+                    text = "Telefonnummer: ${friend.phone}",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
                 Text(
-                    text = "🎂 ${friend.birthDate}",
+                    text = "Bursdag: ${friend.birthDate}",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )

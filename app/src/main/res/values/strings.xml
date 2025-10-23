@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">DAVE3600_prosjekt2_379289</string>
+    <string name="app_name">Bursdagsappen</string>
+
+    <string name="my_friends">Mine venner</string>
+    <string name="name">Navn</string>
+    <string name="phone">Telefon</string>
+    <string name="birthday">Bursdag</string>
+    <string name="birthday_w_example">Bursdag (DD.MM.YYYY)</string>
+    <string name="birthday_example">01.01.2001</string>
+    <string name="back">Tilbake</string>
+    <string name="abort">Avbryt</string>
+    <string name="add_friend">Legg til en venn</string>
+    <string name="save">Lagre</string>
+
+    <!--Feilmeldinger-->
+    <string name="name_error">"Navn kan ikke være tomt"</string>
+    <string name="phone_error">"Telefon kan ikke være tomt"</string>
+    <string name="birthday_error">"Fødselsdag kan ikke være tom"</string>
+    <string name="birthday_format_error">"Feil format på fødselsdag. Bruk DD.MM.YYYY"</string>
 </resources>

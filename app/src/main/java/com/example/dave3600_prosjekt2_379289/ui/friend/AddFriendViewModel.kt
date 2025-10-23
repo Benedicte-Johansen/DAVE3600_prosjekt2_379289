@@ -25,12 +25,7 @@ class AddFriendViewModel(
     // Public read-only state
     val uiState: StateFlow<AddFriendUiState> = _uiState.asStateFlow()
 
-    /**
-     * Lagrer en ny venn i databasen
-     * @param name Vennens navn
-     * @param phone Telefonnummer
-     * @param birthDate Fødselsdato i format DD-MM-YYYY
-     */
+    //Lagrer en ny venn i databasen
     fun saveFriend(name: String, phone: String, birthDate: String) {
         // Valider input
         val validationError = validateInput(name, phone, birthDate)
@@ -68,10 +63,6 @@ class AddFriendViewModel(
         }
     }
 
-    /**
-     * Validerer input-data
-     * @return Feilmelding hvis validering feiler, null hvis alt er ok
-     */
     private fun validateInput(name: String, phone: String, birthDate: String): String? {
         return when {
             name.isBlank() -> "Navn kan ikke være tomt"
@@ -79,22 +70,16 @@ class AddFriendViewModel(
             phone.isBlank() -> "Telefonnummer kan ikke være tomt"
             phone.length < 8 -> "Telefonnummer må være minst 8 siffer"
             birthDate.isBlank() -> "Fødselsdato kan ikke være tom"
-            !isValidDateFormat(birthDate) -> "Ugyldig datoformat. Bruk DD-MM-YYYY (f.eks. 16-09-1999)"
+            !isValidDateFormat(birthDate) -> "Ugyldig datoformat. Bruk DD.MM.YYYY (f.eks. 16.09.1999)"
             !isValidDate(birthDate) -> "Ugyldig dato. Sjekk dag, måned og år"
             else -> null
         }
     }
 
-    /**
-     * Sjekker om datoen har riktig format DD-MM-YYYY
-     */
     private fun isValidDateFormat(date: String): Boolean {
-        return date.matches(Regex("\\d{2}-\\d{2}-\\d{4}"))
+        return date.matches(Regex("\\d{2}.\\d{2}.\\d{4}"))
     }
 
-    /**
-     * Sjekker om datoen er gyldig (f.eks. ikke 32-13-2025)
-     */
     private fun isValidDate(date: String): Boolean {
         if (!isValidDateFormat(date)) return false
 
@@ -114,24 +99,7 @@ class AddFriendViewModel(
         }
     }
 
-    /**
-     * Sjekker om året er et skuddår
-     */
     private fun isLeapYear(year: Int): Boolean {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
-    }
-
-    /**
-     * Nullstiller feilmeldinger
-     */
-    fun clearError() {
-        _uiState.value = _uiState.value.copy(errorMessage = null)
-    }
-
-    /**
-     * Nullstiller hele tilstanden (brukes når man forlater skjermen)
-     */
-    fun resetState() {
-        _uiState.value = AddFriendUiState()
     }
 }
