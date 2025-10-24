@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
     ) { isGranted ->
         val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         prefs.edit().putBoolean("sms_enabled", isGranted).apply()
-        prefs.edit().putBoolean("first_launch", false).apply()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,21 +51,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                    val isFirstLaunch = prefs.getBoolean("first_launch", true)
-
-                    if (isFirstLaunch) {
-                        FirstLaunchDialog(
-                            onAccept = {
-                                requestPermissionLauncher.launch(Manifest.permission.SEND_SMS)
-                            },
-                            onDeny = {
-                                prefs.edit().putBoolean("first_launch", false).apply()
-                                prefs.edit().putBoolean("sms_enabled", false).apply()
-                            }
-                        )
-                    }
-
                     AppNavigation()
                 }
             }
@@ -92,7 +76,10 @@ class MainActivity : ComponentActivity() {
                 EditFriendScreen(navController, repository, friendId)
             }
             composable("preferences") {
-                PreferencesScreen(navController, preferencesViewModel)
+                PreferencesScreen(navController, preferencesViewModel, requestPermissionLauncher)
+            }
+            composable("sms_test") {
+                SmsTestScreen(navController)
             }
         }
     }
@@ -129,43 +116,5 @@ class MainActivity : ComponentActivity() {
             }
         }
         return calendar.timeInMillis - currentTime
-    }
-}
-
-@Composable
-fun FirstLaunchDialog(
-    onAccept: () -> Unit,
-    onDeny: () -> Unit
-) {
-    var showDialog by remember { mutableStateOf(true) }
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { },
-            title = { Text("Velkommen til Birthday SMS!") },
-            text = {
-                Text(
-                    "Denne appen kan sende automatiske bursdagshilsener til vennene dine.\n\n" +
-                            "For at dette skal fungere, trenger appen tillatelse til å sende SMS-meldinger.\n\n" +
-                            "Vil du aktivere denne funksjonen? Du kan endre dette senere i innstillingene."
-                )
-            },
-            confirmButton = {
-                Button(onClick = {
-                    showDialog = false
-                    onAccept()
-                }) {
-                    Text("Ja, aktiver SMS")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = {
-                    showDialog = false
-                    onDeny()
-                }) {
-                    Text("Nei takk")
-                }
-            }
-        )
     }
 }

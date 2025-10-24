@@ -175,14 +175,14 @@ fun EditFriendScreen(
         OutlinedTextField(
             value = birthDate,
             onValueChange = { birthDate = it },
-            label = { Text("Fødselsdag (DD-MM-YYYY)") },
+            label = { Text("Fødselsdag (DD.MM.YYYY)") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             enabled = !uiState.isLoading,
-            placeholder = { Text("16-09-1999") },
+            placeholder = { Text("16.09.1999") },
             supportingText = {
                 Text(
-                    "Format: dag-måned-år (f.eks. 16-09-1999)",
+                    "Format: dag.måned.år (f.eks. 16.09.1999)",
                     fontSize = 12.sp,
                     color = Color.Gray
                 )

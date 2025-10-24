@@ -1,10 +1,7 @@
 package com.example.dave3600_prosjekt2_379289.ui.friend
 
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dave3600_prosjekt2_379289.R
 import com.example.dave3600_prosjekt2_379289.data.FriendRepository
 import com.example.dave3600_prosjekt2_379289.domain.Friend
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-// UI-tilstand for AddFriend-skjermen
 data class AddFriendUiState(
     val isLoading: Boolean = false,
     val isSaved: Boolean = false,
@@ -23,23 +19,17 @@ class AddFriendViewModel(
     private val repository: FriendRepository
 ) : ViewModel() {
 
-    // Privat mutable state
     private val _uiState = MutableStateFlow(AddFriendUiState())
-    // Public read-only state
     val uiState: StateFlow<AddFriendUiState> = _uiState.asStateFlow()
 
-    val context = LocalContext.current
-
-    //Lagrer en ny venn i databasen
     fun saveFriend(name: String, phone: String, birthDate: String) {
         // Valider input
-        val validationError = validateInput(name, phone, birthDate)
+        val validationError = InputValidation.validateInput(name, phone, birthDate)
         if (validationError != null) {
             _uiState.value = _uiState.value.copy(errorMessage = validationError)
             return
         }
 
-        // Start lagring
         viewModelScope.launch {
             try {
                 _uiState.value = _uiState.value.copy(
@@ -62,50 +52,13 @@ class AddFriendViewModel(
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = context.getString(R.string.saving_friend_error) + "${e.message}"
+                    errorMessage = "Kunne ikke lagre venn: ${e.message}"
                 )
             }
         }
     }
 
-    private fun validateInput(name: String, phone: String, birthDate: String): String? {
-        return when {
-            name.isBlank() -> "Navn kan ikke være tomt"
-            name.length < 2 -> "Navn må være minst 2 tegn"
-            phone.isBlank() -> "Telefonnummer kan ikke være tomt"
-            phone.length < 8 -> "Telefonnummer må være minst 8 siffer"
-            //phone.isNaN() -> "Telefonnummer skal kun være tall"
-            birthDate.isBlank() -> "Fødselsdato kan ikke være tom"
-            !isValidDateFormat(birthDate) -> "Ugyldig datoformat. Bruk DD.MM.YYYY (f.eks. 16.09.1999)"
-            !isValidDate(birthDate) -> "Ugyldig dato. Sjekk dag, måned og år"
-            else -> null
-        }
-    }
-
-    private fun isValidDateFormat(date: String): Boolean {
-        return date.matches(Regex("\\d{2}.\\d{2}.\\d{4}"))
-    }
-
-    private fun isValidDate(date: String): Boolean {
-        if (!isValidDateFormat(date)) return false
-
-        val parts = date.split("-")
-        val day = parts[0].toIntOrNull() ?: return false
-        val month = parts[1].toIntOrNull() ?: return false
-        val year = parts[2].toIntOrNull() ?: return false
-
-        return when {
-            month !in 1..12 -> false
-            day !in 1..31 -> false
-            year < 1900 || year > 2100 -> false
-            month in listOf(4, 6, 9, 11) && day > 30 -> false // April, juni, sept, nov har 30 dager
-            month == 2 && day > 29 -> false // Februar maks 29
-            month == 2 && day == 29 && !isLeapYear(year) -> false // Skuddår-sjekk
-            else -> true
-        }
-    }
-
-    private fun isLeapYear(year: Int): Boolean {
-        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+    fun clearError() {
+        _uiState.value = _uiState.value.copy(errorMessage = null)
     }
 }

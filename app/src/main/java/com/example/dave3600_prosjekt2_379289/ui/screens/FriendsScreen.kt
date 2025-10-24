@@ -1,6 +1,5 @@
 package com.example.dave3600_prosjekt2_379289.ui.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,11 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.dave3600_prosjekt2_379289.R
 import com.example.dave3600_prosjekt2_379289.data.FriendRepository
 import com.example.dave3600_prosjekt2_379289.domain.Friend
 import com.example.dave3600_prosjekt2_379289.ui.friends.FriendsViewModel
@@ -30,6 +31,7 @@ fun FriendsScreen(
         FriendsViewModel(repository)
     }
 
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     var showDeleteDialog by remember { mutableStateOf(false) }
     var friendToDelete by remember { mutableStateOf<Friend?>(null) }
@@ -37,10 +39,10 @@ fun FriendsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Mine Venner") },
+                title = { Text(context.getString(R.string.my_friends)) },
                 actions = {
                     IconButton(onClick = { navController.navigate("preferences") }) {
-                        Icon(Icons.Default.Settings, contentDescription = "Innstillinger")
+                        Icon(Icons.Default.Settings, contentDescription = context.getString(R.string.settings))
                     }
                 }
             )
@@ -50,7 +52,7 @@ fun FriendsScreen(
                 onClick = { navController.navigate("add_friend") },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Legg til venn")
+                Icon(Icons.Default.Add, contentDescription = context.getString(R.string.add_friend))
             }
         }
     ) { padding ->
@@ -78,7 +80,7 @@ fun FriendsScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                "Bursdager i dag!",
+                                context.getString(R.string.birthdays_today),
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF2E7D32)
@@ -111,7 +113,7 @@ fun FriendsScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            "Ingen venner lagt til enda",
+                            context.getString(R.string.no_friends_yet),
                             fontSize = 16.sp,
                             color = Color.Gray
                         )
@@ -143,8 +145,8 @@ fun FriendsScreen(
     if (showDeleteDialog && friendToDelete != null) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Slett venn") },
-            text = { Text("Er du sikker på at du vil slette ${friendToDelete?.name}?") },
+            title = { Text(context.getString(R.string.delete_friend)) },
+            text = { Text(context.getString(R.string.delete_friend_confirm, friendToDelete?.name ?: "")) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -153,12 +155,12 @@ fun FriendsScreen(
                         friendToDelete = null
                     }
                 ) {
-                    Text("Slett")
+                    Text(context.getString(R.string.delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Avbryt")
+                    Text(context.getString(R.string.abort))
                 }
             }
         )
@@ -175,7 +177,7 @@ fun FriendCard(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = Color(0xFFE1BEE7)
         ),
     ) {
         Row(
@@ -189,26 +191,27 @@ fun FriendCard(
                 Text(
                     text = friend.name,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF4A148C)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Telefonnummer: ${friend.phone}",
+                    text = "Telefonnummer: + ${friend.phone}",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color(0xFF6A1B9A)
                 )
                 Text(
                     text = "Bursdag: ${friend.birthDate}",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color(0xFF6A1B9A)
                 )
             }
             Row {
                 IconButton(onClick = onEditClick) {
-                    Icon(Icons.Default.Edit, contentDescription = "Rediger")
+                    Icon(Icons.Default.Edit, contentDescription = "Rediger", tint = Color(0xFF4A148C))
                 }
                 IconButton(onClick = onDeleteClick) {
-                    Icon(Icons.Default.Delete, contentDescription = "Slett")
+                    Icon(Icons.Default.Delete, contentDescription = "Slett", tint = Color(0xFF4A148C))
                 }
             }
         }

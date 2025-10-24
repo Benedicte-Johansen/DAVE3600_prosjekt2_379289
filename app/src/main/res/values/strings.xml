@@ -1,22 +1,52 @@
 <resources>
     <string name="app_name">Bursdagsappen</string>
 
+    <!-- Generelle -->
     <string name="my_friends">Mine venner</string>
     <string name="name">Navn</string>
     <string name="phone">Telefon</string>
     <string name="birthday">Bursdag</string>
-    <string name="birthday_w_example">Bursdag (DD.MM.YYYY)</string>
-    <string name="birthday_example">01.01.2001</string>
+    <string name="birthday_w_example">Bursdag (DD-MM-YYYY)</string>
+    <string name="birthday_example">01-01-2001</string>
+    <string name="birthday_example_dash">16-09-1999</string>
     <string name="back">Tilbake</string>
     <string name="abort">Avbryt</string>
     <string name="add_friend">Legg til en venn</string>
+    <string name="edit_friend">Rediger venn</string>
     <string name="save">Lagre</string>
-    <string name="reg_ex_birthday">\\d{2}.\\d{2}.\\d{4}</string>
+    <string name="save_changes">Lagre endringer</string>
+    <string name="save_message">Lagre melding</string>
+    <string name="delete">Slett</string>
+    <string name="delete_friend">Slett venn</string>
+    <string name="delete_friend_confirm">Er du sikker på at du vil slette %s?</string>
+    <string name="close">Lukk</string>
+    <string name="go_back">Gå tilbake</string>
+    <string name="settings">Innstillinger</string>
 
-    <!--Feilmeldinger-->
-    <string name="name_error">"Navn kan ikke være tomt"</string>
-    <string name="phone_error">"Telefon kan ikke være tomt"</string>
-    <string name="birthday_error">"Fødselsdag kan ikke være tom"</string>
-    <string name="birthday_format_error">"Feil format på fødselsdag. Bruk DD.MM.YYYY"</string>
+    <!-- FriendsScreen -->
+    <string name="birthdays_today">Bursdager i dag!</string>
+    <string name="no_friends_yet">Ingen venner lagt til enda</string>
+
+    <!-- PreferencesScreen -->
+    <string name="sms_messages">SMS-meldinger</string>
+    <string name="sms_description">Appen vil sende automatiske bursdagshilsener til vennene dine</string>
+    <string name="enable_sms">Aktiver SMS-utsendelse</string>
+    <string name="no_sms_permission">SMS-tillatelse er ikke gitt. Appen vil ikke kunne sende meldinger.</string>
+    <string name="customize_message">Tilpass melding</string>
+    <string name="message_description">Denne meldingen sendes til vennene dine på bursdagen deres</string>
+    <string name="birthday_message">Bursdagsmelding</string>
+    <string name="how_it_works">Slik fungerer det</string>
+    <string name="how_it_works_description">• Appen sjekker automatisk hver dag om noen av vennene dine har bursdag\n• Hvis SMS er aktivert, sendes meldingen automatisk\n• Du kan når som helst endre meldingen eller skru av SMS-utsendelse</string>
+
+    <!-- Validering og feilmeldinger -->
+    <string name="name_error">Navn kan ikke være tomt</string>
+    <string name="phone_error">Telefon kan ikke være tomt</string>
+    <string name="birthday_error">Fødselsdag kan ikke være tom</string>
+    <string name="birthday_format_error">Feil format på fødselsdag. Bruk DD-MM-YYYY</string>
     <string name="saving_friend_error">Kunne ikke lagre venn: </string>
+    <string name="loading_friend">Laster venn...</string>
+    <string name="friend_not_found">Kunne ikke finne vennen</string>
+
+    <!-- Regex -->
+    <string name="reg_ex_birthday">\\d{2}-\\d{2}-\\d{4}</string>
 </resources>
