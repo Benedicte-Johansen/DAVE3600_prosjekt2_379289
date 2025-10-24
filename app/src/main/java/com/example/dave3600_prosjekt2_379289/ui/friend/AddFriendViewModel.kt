@@ -1,5 +1,6 @@
 package com.example.dave3600_prosjekt2_379289.ui.friend
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dave3600_prosjekt2_379289.data.FriendRepository
@@ -69,6 +70,7 @@ class AddFriendViewModel(
             name.length < 2 -> "Navn må være minst 2 tegn"
             phone.isBlank() -> "Telefonnummer kan ikke være tomt"
             phone.length < 8 -> "Telefonnummer må være minst 8 siffer"
+            //phone.isNaN() -> "Telefonnummer skal kun være tall"
             birthDate.isBlank() -> "Fødselsdato kan ikke være tom"
             !isValidDateFormat(birthDate) -> "Ugyldig datoformat. Bruk DD.MM.YYYY (f.eks. 16.09.1999)"
             !isValidDate(birthDate) -> "Ugyldig dato. Sjekk dag, måned og år"
