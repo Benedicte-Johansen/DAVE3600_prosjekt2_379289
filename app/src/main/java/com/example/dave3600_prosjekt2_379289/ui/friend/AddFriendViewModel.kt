@@ -1,8 +1,10 @@
 package com.example.dave3600_prosjekt2_379289.ui.friend
 
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dave3600_prosjekt2_379289.R
 import com.example.dave3600_prosjekt2_379289.data.FriendRepository
 import com.example.dave3600_prosjekt2_379289.domain.Friend
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +27,8 @@ class AddFriendViewModel(
     private val _uiState = MutableStateFlow(AddFriendUiState())
     // Public read-only state
     val uiState: StateFlow<AddFriendUiState> = _uiState.asStateFlow()
+
+    val context = LocalContext.current
 
     //Lagrer en ny venn i databasen
     fun saveFriend(name: String, phone: String, birthDate: String) {
@@ -58,7 +62,7 @@ class AddFriendViewModel(
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = "Kunne ikke lagre venn: ${e.message}"
+                    errorMessage = context.getString(R.string.saving_friend_error) + "${e.message}"
                 )
             }
         }

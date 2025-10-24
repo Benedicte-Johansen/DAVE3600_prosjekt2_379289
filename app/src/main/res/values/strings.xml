@@ -11,10 +11,12 @@
     <string name="abort">Avbryt</string>
     <string name="add_friend">Legg til en venn</string>
     <string name="save">Lagre</string>
+    <string name="reg_ex_birthday">\\d{2}.\\d{2}.\\d{4}</string>
 
     <!--Feilmeldinger-->
     <string name="name_error">"Navn kan ikke være tomt"</string>
     <string name="phone_error">"Telefon kan ikke være tomt"</string>
     <string name="birthday_error">"Fødselsdag kan ikke være tom"</string>
     <string name="birthday_format_error">"Feil format på fødselsdag. Bruk DD.MM.YYYY"</string>
+    <string name="saving_friend_error">Kunne ikke lagre venn: </string>
 </resources>

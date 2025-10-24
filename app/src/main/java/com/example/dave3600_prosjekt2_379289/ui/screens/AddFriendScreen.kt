@@ -107,7 +107,7 @@ fun AddFriendScreen(
                     name.isBlank() -> errorMessage = context.getString(R.string.name_error)
                     phone.isBlank() -> errorMessage = context.getString(R.string.phone_error)
                     birthDate.isBlank() -> errorMessage = context.getString(R.string.birthday_error)
-                    !birthDate.matches(Regex("\\d{2}.\\d{2}.\\d{4}")) ->
+                    !birthDate.matches(Regex(context.getString(R.string.reg_ex_birthday))) ->
                         errorMessage = context.getString(R.string.birthday_format_error)
                     else -> {
                         errorMessage = ""
