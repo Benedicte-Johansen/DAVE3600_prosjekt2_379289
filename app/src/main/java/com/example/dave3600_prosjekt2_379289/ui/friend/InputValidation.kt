@@ -21,7 +21,7 @@ private fun isValidDateFormat(date: String): Boolean {
 private fun isValidDate(date: String): Boolean {
     if (!isValidDateFormat(date)) return false
 
-    val parts = date.split("-")
+    val parts = date.split(".")
     val day = parts[0].toIntOrNull() ?: return false
     val month = parts[1].toIntOrNull() ?: return false
     val year = parts[2].toIntOrNull() ?: return false
