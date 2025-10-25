@@ -40,6 +40,19 @@
     <string name="how_it_works">Slik fungerer det</string>
     <string name="how_it_works_description">• Appen sjekker automatisk hver dag om noen av vennene dine har bursdag\n• Hvis SMS er aktivert, sendes meldingen automatisk\n• Du kan når som helst endre meldingen eller skru av SMS-utsendelse</string>
 
+    <!--SmsTestScreen-->
+    <string name="test_message">Test melding fra Bursdagsappen!</string>
+    <string name="sms_test">SMS Test</string>
+    <string name="test_func">Test SMS-funksjonalitet</string>
+    <string name="how_to_use_sms_test">Bruk denne skjermen for å teste om appen kan sende SMS-meldinger.</string>
+    <string name="own_phone">Ditt eget telefonnummer</string>
+    <string name="message">Melding</string>
+    <string name="phone_instruction">Vennligst skriv inn et telefonnummer</string>
+    <string name="message_instruction">Vennligst skriv inn en melding</string>
+    <string name="send_test_sms">Send test-SMS</string>
+    <string name="testing_tips">Tips for testing:</string>
+    <string name="how_to_test">1. Skriv inn ditt eget telefonnummer \n2. Trykk på Send test-SMS \n3. Sjekk om du mottar meldingen \n4. Hvis du ikke mottar melding, sjekk SMS-tillatelser i innstillinger</string>
+
     <!-- Validering og feilmeldinger -->
     <string name="name_error">Navn kan ikke være tomt</string>
     <string name="phone_error">Telefon kan ikke være tomt</string>

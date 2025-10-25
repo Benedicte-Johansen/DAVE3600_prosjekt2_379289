@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.telephony.SmsManager
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -18,22 +20,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import com.example.dave3600_prosjekt2_379289.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SmsTestScreen(navController: NavController) {
     val context = LocalContext.current
     var phoneNumber by remember { mutableStateOf("") }
-    var message by remember { mutableStateOf("Test melding fra Bursdagsappen!") }
+    var message by remember { mutableStateOf(context.getString(R.string.test_message)) }
     var isSending by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("SMS Test") },
+                title = { Text(context.getString(R.string.sms_test)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Tilbake")
+                        Icon(Icons.Default.ArrowBack, contentDescription = context.getString(R.string.back))
                     }
                 }
             )
@@ -42,18 +45,18 @@ fun SmsTestScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                "Test SMS-funksjonalitet",
+                context.getString(R.string.test_func),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                "Bruk denne skjermen for å teste om appen kan sende SMS-meldinger.",
+                context.getString(R.string.how_to_use_sms_test),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -67,16 +70,16 @@ fun SmsTestScreen(navController: NavController) {
                         phoneNumber = it
                     }
                 },
-                label = { Text("Telefonnummer") },
+                label = { Text(context.getString(R.string.phone)) },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Ditt eget telefonnummer") },
+                placeholder = { context.getString(R.string.own_phone) },
                 singleLine = true
             )
 
             OutlinedTextField(
                 value = message,
                 onValueChange = { message = it },
-                label = { Text("Melding") },
+                label = { Text(context.getString(R.string.message)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3,
                 maxLines = 5
@@ -85,11 +88,19 @@ fun SmsTestScreen(navController: NavController) {
             Button(
                 onClick = {
                     if (phoneNumber.isBlank()) {
-                        Toast.makeText(context, "Vennligst skriv inn et telefonnummer", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.phone_instruction),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@Button
                     }
                     if (message.isBlank()) {
-                        Toast.makeText(context, "Vennligst skriv inn en melding", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.message_instruction),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@Button
                     }
 
@@ -99,7 +110,11 @@ fun SmsTestScreen(navController: NavController) {
                             Manifest.permission.SEND_SMS
                         ) != PackageManager.PERMISSION_GRANTED
                     ) {
-                        Toast.makeText(context, "SMS-tillatelse er ikke gitt", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.no_sms_permission),
+                            Toast.LENGTH_LONG
+                        ).show()
                         return@Button
                     }
 
@@ -107,9 +122,11 @@ fun SmsTestScreen(navController: NavController) {
                     try {
                         val smsManager = context.getSystemService(SmsManager::class.java)
                         smsManager.sendTextMessage(phoneNumber, null, message, null, null)
-                        Toast.makeText(context, "SMS sendt til $phoneNumber!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "SMS sendt til $phoneNumber!", Toast.LENGTH_LONG)
+                            .show()
                     } catch (e: Exception) {
-                        Toast.makeText(context, "Feil ved sending: ${e.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Feil ved sending: ${e.message}", Toast.LENGTH_LONG)
+                            .show()
                     } finally {
                         isSending = false
                     }
@@ -123,7 +140,7 @@ fun SmsTestScreen(navController: NavController) {
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 } else {
-                    Text("Send test-SMS")
+                    Text(context.getString(R.string.send_test_sms))
                 }
             }
 
@@ -135,44 +152,14 @@ fun SmsTestScreen(navController: NavController) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        "Tips for testing:",
+                        context.getString(R.string.testing_tips),
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("1. Skriv inn ditt eget telefonnummer")
-                    Text("2. Trykk på 'Send test-SMS'")
-                    Text("3. Sjekk om du mottar meldingen")
-                    Text("4. Hvis du ikke mottar melding, sjekk SMS-tillatelser i innstillinger")
-                }
-            }
-
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                )
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        "For å teste bursdagsfunksjonalitet:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("1. Legg til en venn med dagens dato som bursdag")
-                    Text("2. Bruk formatet: DD.MM.YYYY (f.eks. ${getCurrentDate()})")
-                    Text("3. Vent til klokken 09:00 neste dag, eller test WorkManager manuelt")
+                    Text(context.getString(R.string.how_to_test))
                 }
             }
         }
     }
-}
-
-private fun getCurrentDate(): String {
-    val calendar = java.util.Calendar.getInstance()
-    val day = calendar.get(java.util.Calendar.DAY_OF_MONTH).toString().padStart(2, '0')
-    val month = (calendar.get(java.util.Calendar.MONTH) + 1).toString().padStart(2, '0')
-    val year = calendar.get(java.util.Calendar.YEAR)
-    return "$day-$month-$year"
 }
