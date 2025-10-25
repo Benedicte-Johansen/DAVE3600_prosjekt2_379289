@@ -30,11 +30,17 @@ fun AddFriendScreen(
     }
 
     val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsState()
 
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var birthDate by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.isSaved) {
+        if (uiState.isSaved){
+            navController.popBackStack()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -56,16 +62,31 @@ fun AddFriendScreen(
             Text(text = context.getString(R.string.add_friend), fontSize = 24.sp, fontWeight = FontWeight.Bold)
         }
 
-        if (errorMessage.isNotEmpty()) {
+        if (uiState.errorMessage != null){
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE))
             ) {
-                Text(
-                    errorMessage,
-                    modifier = Modifier.padding(16.dp),
-                    color = Color.Red
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        uiState.errorMessage ?: "",
+                        modifier = Modifier.weight(1f),
+                        color = Color.Red
+                    )
+                    IconButton(onClick = { viewModel.clearError() }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = context.getString(R.string.close),
+                            tint = Color.Red
+                        )
+                    }
+                }
             }
         }
 
@@ -75,27 +96,41 @@ fun AddFriendScreen(
             onValueChange = { name = it },
             label = { Text(text = context.getString(R.string.name)) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            placeholder = {Text(context.getString(R.string.name_example))},
+            enabled = !uiState.isLoading
         )
 
         // Telefon
         OutlinedTextField(
             value = phone,
-            onValueChange = { phone = it },
+            onValueChange = { newValue ->
+                if (newValue.all {it.isDigit()} && newValue.length <= 8){
+                    phone = newValue
+                }
+            },
             label = { Text(text = context.getString(R.string.phone)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+            placeholder = { Text(context.getString(R.string.phone_example))},
+            enabled = !uiState.isLoading
         )
 
         // Fødselsdag (format: DD.MM.YYYY)
         OutlinedTextField(
             value = birthDate,
-            onValueChange = { birthDate = it },
+            onValueChange = { newValue ->
+                //Tillater kun tall og "."
+                if (newValue.all {it.isDigit() || it == '.'} && newValue.length <= 10){
+                    birthDate = newValue
+                }
+            },
             label = { Text(text = context.getString(R.string.birthday_w_example)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            placeholder = { Text(text = context.getString(R.string.birthday_example)) }
+            placeholder = { Text(text = context.getString(R.string.birthday_example)) },
+            enabled = !uiState.isLoading
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -103,24 +138,22 @@ fun AddFriendScreen(
         // Knapper
         Button(
             onClick = {
-                when {
-                    name.isBlank() -> errorMessage = context.getString(R.string.name_error)
-                    phone.isBlank() -> errorMessage = context.getString(R.string.phone_error)
-                    birthDate.isBlank() -> errorMessage = context.getString(R.string.birthday_error)
-                    !birthDate.matches(Regex(context.getString(R.string.reg_ex_birthday))) ->
-                        errorMessage = context.getString(R.string.birthday_format_error)
-                    else -> {
-                        errorMessage = ""
-                        viewModel.saveFriend(name, phone, birthDate)
-                    }
-                }
+                viewModel.saveFriend(name, phone, birthDate)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE)),
+            enabled = !uiState.isLoading
         ) {
-            Text(text = context.getString(R.string.save), color = Color.White, fontSize = 16.sp)
+            if (uiState.isLoading){
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = Color.White
+                )
+            } else {
+                Text(text = context.getString(R.string.save), color = Color.White, fontSize = 16.sp)
+            }
         }
 
         Button(
@@ -128,7 +161,8 @@ fun AddFriendScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            enabled = !uiState.isLoading
         ) {
             Text(text = context.getString(R.string.abort), fontSize = 16.sp)
         }

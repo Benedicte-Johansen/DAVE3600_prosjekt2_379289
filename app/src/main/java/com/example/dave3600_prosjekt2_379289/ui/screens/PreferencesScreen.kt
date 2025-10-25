@@ -2,7 +2,8 @@ package com.example.dave3600_prosjekt2_379289.ui.screens
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,8 +26,7 @@ import com.example.dave3600_prosjekt2_379289.ui.PreferencesViewModel
 @Composable
 fun PreferencesScreen(
     navController: NavController,
-    viewModel: PreferencesViewModel,
-    permissionLauncher: ManagedActivityResultLauncher<String, Boolean>
+    viewModel: PreferencesViewModel
 ) {
     val context = LocalContext.current
     val smsEnabled by viewModel.smsEnabled.collectAsState()
@@ -40,6 +40,14 @@ fun PreferencesScreen(
                 Manifest.permission.SEND_SMS
             ) == PackageManager.PERMISSION_GRANTED
         )
+    }
+
+    // Opprett permission launcher
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasSmsPermission = isGranted
+        viewModel.setSmsEnabled(isGranted)
     }
 
     LaunchedEffect(customMessage) {
@@ -95,9 +103,9 @@ fun PreferencesScreen(
                             onCheckedChange = { enabled ->
                                 if (enabled && !hasSmsPermission) {
                                     permissionLauncher.launch(Manifest.permission.SEND_SMS)
-                                    hasSmsPermission = true
+                                } else {
+                                    viewModel.setSmsEnabled(enabled)
                                 }
-                                viewModel.setSmsEnabled(enabled)
                             }
                         )
                     }

@@ -11,12 +11,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.dave3600_prosjekt2_379289.R
 import com.example.dave3600_prosjekt2_379289.data.FriendRepository
 import com.example.dave3600_prosjekt2_379289.ui.friend.EditFriendViewModel
 
@@ -29,6 +31,8 @@ fun EditFriendScreen(
     val viewModel: EditFriendViewModel = viewModel {
         EditFriendViewModel(repository)
     }
+
+    val context = LocalContext.current
 
     // Lokale state-variabler for input-feltene
     var name by remember { mutableStateOf("") }
@@ -70,7 +74,7 @@ fun EditFriendScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator()
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("Laster venn...")
+                Text(context.getString(R.string.loading_friend))
             }
         }
         return
@@ -87,12 +91,12 @@ fun EditFriendScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    "Kunne ikke finne vennen",
+                    context.getString(R.string.friend_not_found),
                     fontSize = 18.sp,
                     color = Color.Red
                 )
                 Button(onClick = { navController.popBackStack() }) {
-                    Text("Gå tilbake")
+                    Text(context.getString(R.string.go_back))
                 }
             }
         }
@@ -114,7 +118,7 @@ fun EditFriendScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Tilbake")
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = context.getString(R.string.back))
             }
             Text("Rediger venn", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         }
@@ -152,41 +156,43 @@ fun EditFriendScreen(
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Navn") },
+            label = { Text(context.getString(R.string.name)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             enabled = !uiState.isLoading,
-            placeholder = { Text("F.eks. Ola Nordmann") }
+            placeholder = { Text(context.getString(R.string.name_example)) }
         )
 
         // Telefon-felt
         OutlinedTextField(
             value = phone,
-            onValueChange = { phone = it },
-            label = { Text("Telefonnummer") },
+            onValueChange = { newValue ->
+                if (newValue.all{it.isDigit()} && newValue.length <= 8){
+                    phone = newValue
+                }
+            },
+            label = { Text(context.getString(R.string.phone)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             enabled = !uiState.isLoading,
-            placeholder = { Text("F.eks. 12345678") }
+            placeholder = { Text(context.getString(R.string.phone_example)) }
         )
 
-        // Fødselsdag-felt
+        // Fødselsdag (format: DD.MM.YYYY)
         OutlinedTextField(
             value = birthDate,
-            onValueChange = { birthDate = it },
-            label = { Text("Fødselsdag (DD.MM.YYYY)") },
+            onValueChange = { newValue ->
+                //Tillater kun tall og "."
+                if (newValue.all {it.isDigit() || it == '.'} && newValue.length <= 10){
+                    birthDate = newValue
+                }
+            },
+            label = { Text(text = context.getString(R.string.birthday_w_example)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            enabled = !uiState.isLoading,
-            placeholder = { Text("16.09.1999") },
-            supportingText = {
-                Text(
-                    "Format: dag.måned.år (f.eks. 16.09.1999)",
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
-            }
+            placeholder = { Text(text = context.getString(R.string.birthday_example)) },
+            enabled = !uiState.isLoading
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -208,7 +214,7 @@ fun EditFriendScreen(
                     color = Color.White
                 )
             } else {
-                Text("Lagre endringer", color = Color.White, fontSize = 16.sp)
+                Text(context.getString(R.string.save_changes), color = Color.White, fontSize = 16.sp)
             }
         }
 
@@ -218,10 +224,10 @@ fun EditFriendScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             enabled = !uiState.isLoading
         ) {
-            Text("Avbryt", fontSize = 16.sp)
+            Text(context.getString(R.string.abort), fontSize = 16.sp)
         }
     }
 }

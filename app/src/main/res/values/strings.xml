@@ -4,11 +4,13 @@
     <!-- Generelle -->
     <string name="my_friends">Mine venner</string>
     <string name="name">Navn</string>
+    <string name="name_example">Ola Normann</string>
     <string name="phone">Telefon</string>
+    <string name="phone_example">12345678</string>
     <string name="birthday">Bursdag</string>
-    <string name="birthday_w_example">Bursdag (DD-MM-YYYY)</string>
-    <string name="birthday_example">01-01-2001</string>
-    <string name="birthday_example_dash">16-09-1999</string>
+    <string name="birthday_w_example">Bursdag (DD.MM.YYYY)</string>
+    <string name="birthday_example">01.01.2001</string>
+    <string name="birthday_format">Format: dag.måned.år (f.eks. 01.01.2001)</string>
     <string name="back">Tilbake</string>
     <string name="abort">Avbryt</string>
     <string name="add_friend">Legg til en venn</string>
@@ -42,11 +44,11 @@
     <string name="name_error">Navn kan ikke være tomt</string>
     <string name="phone_error">Telefon kan ikke være tomt</string>
     <string name="birthday_error">Fødselsdag kan ikke være tom</string>
-    <string name="birthday_format_error">Feil format på fødselsdag. Bruk DD-MM-YYYY</string>
+    <string name="birthday_format_error">Feil format på fødselsdag. Bruk DD.MM.YYYY</string>
     <string name="saving_friend_error">Kunne ikke lagre venn: </string>
     <string name="loading_friend">Laster venn...</string>
     <string name="friend_not_found">Kunne ikke finne vennen</string>
-
+    12345678
     <!-- Regex -->
-    <string name="reg_ex_birthday">\\d{2}-\\d{2}-\\d{4}</string>
+    <string name="reg_ex_birthday">\\d{2}.\\d{2}.\\d{4}</string>
 </resources>

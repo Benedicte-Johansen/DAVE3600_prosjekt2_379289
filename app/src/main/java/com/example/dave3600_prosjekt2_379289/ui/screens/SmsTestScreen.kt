@@ -161,7 +161,7 @@ fun SmsTestScreen(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text("1. Legg til en venn med dagens dato som bursdag")
-                    Text("2. Bruk formatet: DD-MM-YYYY (f.eks. ${getCurrentDate()})")
+                    Text("2. Bruk formatet: DD.MM.YYYY (f.eks. ${getCurrentDate()})")
                     Text("3. Vent til klokken 09:00 neste dag, eller test WorkManager manuelt")
                 }
             }

@@ -1,7 +1,5 @@
 package com.example.dave3600_prosjekt2_379289.ui.friend
 
-import androidx.compose.ui.platform.LocalContext
-
 object InputValidation {
 
     fun validateInput(name: String, phone: String, birthDate: String): String? {
@@ -12,20 +10,20 @@ object InputValidation {
             phone.length < 8 -> "Telefonnummer må være minst 8 siffer"
             !phone.all { it.isDigit() } -> "Telefonnummer skal kun inneholde tall"
             birthDate.isBlank() -> "Fødselsdato kan ikke være tom"
-            !isValidDateFormat(birthDate) -> "Ugyldig datoformat. Bruk DD-MM-YYYY (f.eks. 16-09-1999)"
+            !isValidDateFormat(birthDate) -> "Ugyldig datoformat. Bruk DD.MM.YYYY (f.eks. 16.09.1999)"
             !isValidDate(birthDate) -> "Ugyldig dato. Sjekk dag, måned og år"
             else -> null
         }
     }
 
     private fun isValidDateFormat(date: String): Boolean {
-        return date.matches(Regex("\\d{2}-\\d{2}-\\d{4}"))
+        return date.matches(Regex("\\d{2}.\\d{2}.\\d{4}"))
     }
 
     private fun isValidDate(date: String): Boolean {
         if (!isValidDateFormat(date)) return false
 
-        val parts = date.split("-")
+        val parts = date.split(".")
         val day = parts[0].toIntOrNull() ?: return false
         val month = parts[1].toIntOrNull() ?: return false
         val year = parts[2].toIntOrNull() ?: return false

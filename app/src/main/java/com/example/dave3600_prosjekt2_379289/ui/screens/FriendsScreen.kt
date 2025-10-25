@@ -196,7 +196,7 @@ fun FriendCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Telefonnummer: + ${friend.phone}",
+                    text = "Telefonnummer: ${friend.phone}",
                     fontSize = 14.sp,
                     color = Color(0xFF6A1B9A)
                 )

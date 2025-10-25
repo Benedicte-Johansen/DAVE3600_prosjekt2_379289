@@ -1,11 +1,9 @@
 package com.example.dave3600_prosjekt2_379289
 
-import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -28,13 +26,6 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var repository: FriendRepository
     private lateinit var preferencesViewModel: PreferencesViewModel
-
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        prefs.edit().putBoolean("sms_enabled", isGranted).apply()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +67,7 @@ class MainActivity : ComponentActivity() {
                 EditFriendScreen(navController, repository, friendId)
             }
             composable("preferences") {
-                PreferencesScreen(navController, preferencesViewModel, requestPermissionLauncher)
+                PreferencesScreen(navController, preferencesViewModel)
             }
             composable("sms_test") {
                 SmsTestScreen(navController)
